@@ -1,6 +1,5 @@
 <template>
   <section>
-    <SearchBar />
     <div class="books-info">
       <ul>
         <li v-for="book in favBooks" :key="book.id">
@@ -21,7 +20,7 @@
               :class="{ active: book.isFav }"
               class="material-icons"
               @click="bookStore.toggleFav(book.id)"
-              >bookmark</i
+              >delete</i
             >
           </div>
         </li>
