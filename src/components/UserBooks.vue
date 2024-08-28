@@ -26,36 +26,19 @@
           </div>
         </li>
       </ul>
-      <!-- <button @click="fetchRandomUser">Fetch data</button>
-      <h3>{{ userData }}</h3> -->
     </div>
   </section>
 </template>
 
 <script setup>
-import SearchBar from './SearchBar.vue'
-import { computed } from 'vue'
-import { useBookStore } from '../stores/index.js'
-// import { ref, onMounted } from 'vue'
+import SearchBar from "./SearchBar.vue";
+import { computed } from "vue";
+import { useBookStore } from "../stores/index.js";
 
 // only display the books where isFav is true
-const favBooks = computed(() => bookStore.books.filter((book) => book.isFav))
+const favBooks = computed(() => bookStore.books.filter((book) => book.isFav));
 
-const bookStore = useBookStore()
-
-//fetch data practice
-// https://randomuser.me/api
-
-// const userData = ref('')
-
-// onMounted(() => {
-//   fetchRandomUser()
-// })
-// const fetchRandomUser = async () => {
-//   const response = await fetch('https://randomuser.me/api')
-//   const data = await response.json()
-//   userData.value = data
-// }
+const bookStore = useBookStore();
 </script>
 
 <style scoped>
