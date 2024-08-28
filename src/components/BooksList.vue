@@ -1,9 +1,9 @@
 <template>
   <section>
-    <SearchBar />
+    <SearchBar @updateSearchTerm="searchBooks" />
     <div class="books-info">
       <ul>
-        <li v-for="book in bookStore.books" :key="book.id">
+        <li v-for="book in filteredBooks" :key="book.id">
           <base-card class="card">
             <div>
               <h3>{{ book.title }}</h3>
@@ -32,11 +32,53 @@
 </template>
 
 <script setup>
-import SearchBar from './SearchBar.vue'
+import SearchBar from "./SearchBar.vue";
+import { ref, computed } from "vue";
+import { useBookStore } from "../stores/index.js";
 
-import { useBookStore } from '../stores/index.js'
+const books = ref([]);
+const error = ref(null);
 
-const bookStore = useBookStore()
+const fetchBooks = async () => {
+  error.value = null;
+  try {
+    const apiKey = import.meta.env.VITE_API_KEY;
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${apiKey}`,
+    );
+    const data = await response.json();
+
+    if (data.items) {
+      books.value = data.items.map((book) => {
+        return {
+          id: book.id,
+          title: book.volumeInfo.title,
+          author: book.volumeInfo.authors[0],
+        };
+      });
+      console.log(books.value);
+    }
+  } catch (error) {
+    console.log(error);
+    error.value = error.message;
+  }
+};
+const filteredBooks = computed(() => {
+  return books.value.filter((book) => {
+    return book.title.toLowerCase().includes(searchTerm.value.toLowerCase());
+  });
+});
+
+// set search term
+//
+const searchTerm = ref("");
+
+const searchBooks = (term) => {
+  searchTerm.value = term;
+  fetchBooks();
+};
+
+const bookStore = useBookStore();
 </script>
 
 <style scoped>

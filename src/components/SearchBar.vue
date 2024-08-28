@@ -1,20 +1,22 @@
 <template>
   <form>
-    <input type="text" placeholder="Search for a Book" v-model="searchTerm" @input="handleSearch"/>
-    <!-- <button>Search</button> -->
+    <input type="text" placeholder="Search for a Book" v-model="searchTerm" />
     <BaseButton @click="handleSearch">Search</BaseButton>
     <h2 v-if="search">{{ search }}</h2>
   </form>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import BaseButton from './ui/BaseButton.vue'
-const searchTerm = ref('')
-defineEmits(['updateSearchterm'])
-const handleSearch =() => {
-  emit('updateSearchterm', searchTerm.value)
-}
+import { ref, defineEmits } from "vue";
+import BaseButton from "./ui/BaseButton.vue";
+
+const searchTerm = ref("");
+
+const emit = defineEmits(["updateSearchTerm"]);
+
+const handleSearch = () => {
+  emit("updateSearchTerm", searchTerm.value);
+};
 </script>
 
 <style scoped>
