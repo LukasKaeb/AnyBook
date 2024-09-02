@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import SearchBar from "./SearchBar.vue";
 import { computed } from "vue";
 import { useBookStore } from "../stores/index.js";
 

@@ -1,9 +1,15 @@
 <template>
   <section>
-    <SearchBar @updateSearchTerm="searchBooks" />
+    <!-- <SearchBar @updateSearchTerm="searchBooks" /> -->
+    <input
+      type="text"
+      v-model="searchTerm"
+      placeholder="Search for a book..."
+      @input="fetchBooks"
+    />
     <div class="books-info">
       <ul>
-        <li v-for="book in filteredBooks" :key="book.id">
+        <li v-for="book in books" :key="book.id">
           <base-card class="card">
             <div>
               <h3>{{ book.title }}</h3>
@@ -32,55 +38,41 @@
 </template>
 
 <script setup>
-import SearchBar from "./SearchBar.vue";
-import { ref, computed, watch } from "vue";
+// import SearchBar from "./SearchBar.vue";
+import { ref } from "vue";
 import { useBookStore } from "../stores/index.js";
 
 const books = ref([]);
-const error = ref(null);
+const errorMessage = ref(null);
 const searchTerm = ref("");
 
 const fetchBooks = async () => {
+  errorMessage.value = null;
   if (!searchTerm.value) return;
 
-  error.value = null;
   try {
     const apiKey = import.meta.env.VITE_API_KEY;
     const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm.value)}&key=${apiKey}`,
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+        searchTerm.value,
+      )}&key=${apiKey}`,
     );
     const data = await response.json();
 
     if (data.items) {
-      books.value = data.items.map((book) => {
-        return {
-          id: book.id,
-          title: book.volumeInfo.title,
-          author: book.volumeInfo.authors?.[0] || "Unknown Author",
-        };
-      });
-
-      books.value = JSON.parse(JSON.stringify(books.value));
+      books.value = data.items.map((book) => ({
+        id: book.id,
+        title: book.volumeInfo.title,
+        author: book.volumeInfo.authors?.[0] || "Unknown Author",
+        isFav: false,
+      }));
     }
   } catch (err) {
-    console.log(err);
-    error.value = err.message;
+    errorMessage.value = err.message;
   }
-};
-const filteredBooks = computed(() => {
-  return books.value.filter((book) => {
-    return book.title.toLowerCase().includes(searchTerm.value.toLowerCase());
-  });
-});
-
-const searchBooks = (term) => {
-  searchTerm.value = term;
-  fetchBooks();
 };
 
 const bookStore = useBookStore();
-
-watch(searchTerm, fetchBooks);
 </script>
 
 <style scoped>
@@ -159,5 +151,12 @@ div {
 }
 i {
   color: black;
+}
+input {
+  padding: 0.5rem;
+  margin: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 50%;
 }
 </style>
