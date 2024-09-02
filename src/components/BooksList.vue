@@ -33,18 +33,21 @@
 
 <script setup>
 import SearchBar from "./SearchBar.vue";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useBookStore } from "../stores/index.js";
 
 const books = ref([]);
 const error = ref(null);
+const searchTerm = ref("");
 
 const fetchBooks = async () => {
+  if (!searchTerm.value) return;
+
   error.value = null;
   try {
     const apiKey = import.meta.env.VITE_API_KEY;
     const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${apiKey}`,
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm.value)}&key=${apiKey}`,
     );
     const data = await response.json();
 
@@ -53,14 +56,15 @@ const fetchBooks = async () => {
         return {
           id: book.id,
           title: book.volumeInfo.title,
-          author: book.volumeInfo.authors[0],
+          author: book.volumeInfo.authors?.[0] || "Unknown Author",
         };
       });
-      console.log(books.value);
+
+      books.value = JSON.parse(JSON.stringify(books.value));
     }
-  } catch (error) {
-    console.log(error);
-    error.value = error.message;
+  } catch (err) {
+    console.log(err);
+    error.value = err.message;
   }
 };
 const filteredBooks = computed(() => {
@@ -69,16 +73,14 @@ const filteredBooks = computed(() => {
   });
 });
 
-// set search term
-//
-const searchTerm = ref("");
-
 const searchBooks = (term) => {
   searchTerm.value = term;
   fetchBooks();
 };
 
 const bookStore = useBookStore();
+
+watch(searchTerm, fetchBooks);
 </script>
 
 <style scoped>
