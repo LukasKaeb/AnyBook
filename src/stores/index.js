@@ -5,6 +5,8 @@ export const useBookStore = defineStore("bookStore", {
     books: [],
     error: null,
   }),
+
+  // test
   getters: {},
   actions: {
     // async fetchBooks() {
