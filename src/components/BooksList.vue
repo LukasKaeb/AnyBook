@@ -5,11 +5,11 @@
       type="text"
       v-model="searchTerm"
       placeholder="Search for a book..."
-      @input="fetchBooks"
+      @input="updateSearchTerm"
     />
     <div class="books-info">
       <ul>
-        <li v-for="book in books" :key="book.id">
+        <li v-for="book in bookStore.books" :key="book.id">
           <base-card class="card">
             <div>
               <h3>{{ book.title }}</h3>
@@ -27,7 +27,7 @@
             <i
               :class="{ active: book.isFav }"
               class="material-icons"
-              @click="bookStore.toggleFav(book.id)"
+              @click="toggleFav(book.id)"
               >bookmark</i
             >
           </div>
@@ -43,33 +43,42 @@ import { ref } from "vue";
 import { useBookStore } from "../stores/index.js";
 
 const books = ref([]);
-const errorMessage = ref(null);
 const searchTerm = ref("");
 
-const fetchBooks = async () => {
-  errorMessage.value = null;
-  if (!searchTerm.value) return;
+const updateSearchTerm = (term) => {
+  bookStore.setSearchTerm(searchTerm.value);
+  bookStore.fetchBooks();
+};
 
-  try {
-    const apiKey = import.meta.env.VITE_API_KEY;
-    const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-        searchTerm.value,
-      )}&key=${apiKey}`,
-    );
-    const data = await response.json();
+// const fetchBooks = async () => {
+//   errorMessage.value = null;
+//   if (!searchTerm.value) return;
 
-    if (data.items) {
-      books.value = data.items.map((book) => ({
-        id: book.id,
-        title: book.volumeInfo.title,
-        author: book.volumeInfo.authors?.[0] || "Unknown Author",
-        isFav: false,
-      }));
-    }
-  } catch (err) {
-    errorMessage.value = err.message;
-  }
+//   try {
+//     const apiKey = import.meta.env.VITE_API_KEY;
+//     const response = await fetch(
+//       `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+//         searchTerm.value,
+//       )}&key=${apiKey}`,
+//     );
+//     const data = await response.json();
+
+//     if (data.items) {
+//       books.value = data.items.map((book) => ({
+//         id: book.id,
+//         title: book.volumeInfo.title,
+//         author: book.volumeInfo.authors?.[0] || "Unknown Author",
+//         isFav: false,
+//       }));
+//       console.log(books.value);
+//     }
+//   } catch (err) {
+//     errorMessage.value = err.message;
+//   }
+// };
+
+const toggleFav = (id) => {
+  bookStore.toggleFav(id);
 };
 
 const bookStore = useBookStore();

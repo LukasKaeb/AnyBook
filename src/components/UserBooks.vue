@@ -2,7 +2,7 @@
   <section>
     <div class="books-info">
       <ul>
-        <li v-for="book in favBooks" :key="book.id">
+        <li v-for="book in favoriteBooks" :key="book.id">
           <base-card class="card">
             <div>
               <h3>{{ book.title }}</h3>
@@ -19,7 +19,7 @@
             <i
               :class="{ active: book.isFav }"
               class="material-icons"
-              @click="bookStore.toggleFav(book.id)"
+              @click="bookStoreookStore.toggleFav(book.id)"
               >delete</i
             >
           </div>
@@ -33,8 +33,9 @@
 import { computed } from "vue";
 import { useBookStore } from "../stores/index.js";
 
-// only display the books where isFav is true
-const favBooks = computed(() => bookStore.books.filter((book) => book.isFav));
+// get the favorite books from the store
+// and return them
+const favoriteBooks = computed(() => bookStore.getFavBooks);
 
 const bookStore = useBookStore();
 </script>
