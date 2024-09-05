@@ -41,6 +41,17 @@ export const useBookStore = defineStore("bookStore", {
     toggleFav(id) {
       const book = this.books.find((b) => b.id === id);
       book.isFav = !book.isFav;
+
+      let favBooks = JSON.parse(localStorage.getItem("favBooks")) || [];
+      if (book.isFav) {
+        // Add books to favorites if makred as favorite
+        favBooks.push(book);
+      } else {
+        // Remove books from favorites if unmarked as favorite
+        favBooks = favBooks.filter((b) => b.id !== id);
+      }
+      localStorage.setItem("favBooks", JSON.stringify(favBooks));
+      console.log(localStorage.getItem("favBooks"));
     },
     setSearchTerm(term) {
       this.searchTerm = term;

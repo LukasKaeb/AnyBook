@@ -8,21 +8,25 @@
       <div class="routes">
         <router-link class="links" to="/">Home</router-link>
         <router-link class="links" to="/saved-books">Saved Books</router-link>
-        <i class="material-icons" @click="redirect('/saved-books')">bookmarks</i>
+        <i class="material-icons" @click="redirect('/saved-books')"
+          >bookmarks</i
+        >
       </div>
     </nav>
   </section>
 </template>
 
 <script setup>
-// import { ref } from "vue";
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+const router = useRouter();
 
 // redirect user to home page when clicking on header
 const redirect = (route) => {
-  router.push(route)
-}
+  router.push(route);
+};
 </script>
 
 <style scoped>

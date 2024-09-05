@@ -1,5 +1,8 @@
 <template>
   <section>
+    <div>
+      <h2>Bookmarks</h2>
+    </div>
     <div class="books-info">
       <ul>
         <li v-for="book in favoriteBooks" :key="book.id">
@@ -19,32 +22,40 @@
             <i
               :class="{ active: book.isFav }"
               class="material-icons"
-              @click="bookStoreookStore.toggleFav(book.id)"
+              @click="removeFromFavs(book.id)"
               >delete</i
             >
           </div>
         </li>
       </ul>
     </div>
-    <div>
-      <h3>Bookmarks</h3>
-      <p>Create an Account to see your saved books.</p>
-      <router-link to="/register"
-        ><base-button class="login">Create an Account</base-button></router-link
-      >
-    </div>
   </section>
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useBookStore } from "../stores/index.js";
-
-// get the favorite books from the store
-// and return them
-const favoriteBooks = computed(() => bookStore.getFavBooks);
-
+import { ref, onMounted } from "vue";
 const bookStore = useBookStore();
+const favoriteBooks = ref([]);
+
+onMounted(() => {
+  const favBooksFromStorage = localStorage.getItem("favBooks");
+
+  if (favBooksFromStorage) {
+    favoriteBooks.value = JSON.parse(favBooksFromStorage);
+  }
+});
+
+const removeFromFavs = (bookId) => {
+  let favBooks = JSON.parse(localStorage.getItem("favBooks")) || [];
+
+  // Filter out the book which needs to be deleted
+  favBooks = favBooks.filter((book) => book.id !== bookId);
+  localStorage.setItem("favBooks", JSON.stringify(favBooks));
+
+  // Update the display
+  favoriteBooks.value = favBooks;
+};
 </script>
 
 <style scoped>

@@ -42,40 +42,13 @@
 import { ref } from "vue";
 import { useBookStore } from "../stores/index.js";
 
-const books = ref([]);
+const books = ref(JSON.parse(localStorage.getItem("favBooks")) || []);
 const searchTerm = ref("");
 
 const updateSearchTerm = (term) => {
   bookStore.setSearchTerm(searchTerm.value);
   bookStore.fetchBooks();
 };
-
-// const fetchBooks = async () => {
-//   errorMessage.value = null;
-//   if (!searchTerm.value) return;
-
-//   try {
-//     const apiKey = import.meta.env.VITE_API_KEY;
-//     const response = await fetch(
-//       `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-//         searchTerm.value,
-//       )}&key=${apiKey}`,
-//     );
-//     const data = await response.json();
-
-//     if (data.items) {
-//       books.value = data.items.map((book) => ({
-//         id: book.id,
-//         title: book.volumeInfo.title,
-//         author: book.volumeInfo.authors?.[0] || "Unknown Author",
-//         isFav: false,
-//       }));
-//       console.log(books.value);
-//     }
-//   } catch (err) {
-//     errorMessage.value = err.message;
-//   }
-// };
 
 const toggleFav = (id) => {
   bookStore.toggleFav(id);
