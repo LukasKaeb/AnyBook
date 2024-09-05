@@ -26,6 +26,13 @@
         </li>
       </ul>
     </div>
+    <div>
+      <h3>Bookmarks</h3>
+      <p>Create an Account to see your saved books.</p>
+      <router-link to="/register"
+        ><base-button class="login">Create an Account</base-button></router-link
+      >
+    </div>
   </section>
 </template>
 
@@ -117,5 +124,10 @@ div {
 }
 .active {
   color: #f00;
+}
+.login {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  width: 10rem;
 }
 </style>
