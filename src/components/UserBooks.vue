@@ -8,15 +8,24 @@
         <li v-for="book in favoriteBooks" :key="book.id">
           <base-card class="card">
             <div>
-              <h3>{{ book.title }}</h3>
+              <h3>{{ getShortTitle(book.title) }}</h3>
             </div>
 
             <div class="author">
               <p>by {{ book.author }}</p>
             </div>
           </base-card>
+          <base-card v-if="book.isDescVisible">
+            <p>
+              {{ getShortDesc(book.description) }}
+            </p>
+          </base-card>
           <div>
-            <base-button class="description">Description</base-button>
+            <base-button
+              class="description"
+              @click="toggleDescVisibility(book.id)"
+              >Description</base-button
+            >
           </div>
           <div class="icons">
             <i
@@ -55,6 +64,30 @@ const removeFromFavs = (bookId) => {
 
   // Update the display
   favoriteBooks.value = favBooks;
+};
+
+const getShortTitle = (title) => {
+  if (title.length > 50) {
+    return title.slice(0, 50) + "...";
+  } else {
+    return title;
+  }
+};
+
+const getShortDesc = (description) => {
+  const words = description.split(" ");
+  if (words.length > 30) {
+    return words.slice(0, 30).join(" ") + "...";
+  } else {
+    return description;
+  }
+};
+
+const toggleDescVisibility = (bookId) => {
+  const book = favoriteBooks.value.find((book) => book.id === bookId);
+  if (book) {
+    book.isDescVisible = !book.isDescVisible;
+  }
 };
 </script>
 

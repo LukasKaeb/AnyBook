@@ -30,7 +30,10 @@ export const useBookStore = defineStore("bookStore", {
             id: book.id,
             title: book.volumeInfo.title,
             author: book.volumeInfo.authors?.[0] || "Unknown Author",
+            description:
+              book.volumeInfo.description || "No description available",
             isFav: false,
+            isDescVisible: false,
           }));
         }
       } catch (err) {

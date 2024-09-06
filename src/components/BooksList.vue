@@ -12,15 +12,24 @@
         <li v-for="book in bookStore.books" :key="book.id">
           <base-card class="card">
             <div>
-              <h3>{{ book.title }}</h3>
+              <h3>{{ getShortTitle(book.title) }}</h3>
             </div>
 
             <div class="author">
               <p>by {{ book.author }}</p>
             </div>
           </base-card>
+          <base-card v-if="book.isDescVisible">
+            <p>
+              {{ getShortDesc(book.description) }}
+            </p>
+          </base-card>
           <div>
-            <base-button class="description">Description</base-button>
+            <base-button
+              class="description-button"
+              @click="toggleDescVisibility(book.id)"
+              >Description</base-button
+            >
           </div>
           <div class="icons">
             <!-- bookmark a book -->
@@ -45,6 +54,31 @@ import { useBookStore } from "../stores/index.js";
 const books = ref(JSON.parse(localStorage.getItem("favBooks")) || []);
 const searchTerm = ref("");
 
+const getShortTitle = (title) => {
+  if (title.length > 50) {
+    return title.slice(0, 50) + "...";
+  } else {
+    return title;
+  }
+};
+
+const getShortDesc = (description) => {
+  const words = description.split(" ");
+  if (words.length > 30) {
+    return words.slice(0, 30).join(" ") + "...";
+  } else {
+    return description;
+  }
+};
+
+const toggleDescVisibility = (bookId) => {
+  // toggle desc visibility
+  const book = bookStore.books.find((book) => book.id === bookId);
+  if (book) {
+    book.isDescVisible = !book.isDescVisible;
+  }
+};
+
 const updateSearchTerm = (term) => {
   bookStore.setSearchTerm(searchTerm.value);
   bookStore.fetchBooks();
@@ -58,6 +92,11 @@ const bookStore = useBookStore();
 </script>
 
 <style scoped>
+.books-info {
+  margin-top: 2rem;
+  display: flex;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -75,7 +114,7 @@ img {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 /* the buy button needs to be under the book.name */
-.description {
+.description-button {
   display: block;
   justify-content: center;
   align-items: center;
@@ -92,7 +131,7 @@ li {
 }
 .card {
   width: 640px;
-  display: flex;
+  display: block;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
