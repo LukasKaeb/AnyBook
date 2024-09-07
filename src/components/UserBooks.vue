@@ -64,6 +64,11 @@ const removeFromFavs = (bookId) => {
 
   // Update the display
   favoriteBooks.value = favBooks;
+  // set the isFav to false
+  const bookInStore = bookStore.books.find((book) => book.id === bookId);
+  if (bookInStore) {
+    bookInStore.isFav = false;
+  }
 };
 
 const getShortTitle = (title) => {
