@@ -43,8 +43,6 @@ export const useBookStore = defineStore("bookStore", {
 
     toggleFav(id) {
       const book = this.books.find((b) => b.id === id);
-      if (book.isFave) return;
-
       book.isFav = !book.isFav;
 
       let favBooks = JSON.parse(localStorage.getItem("favBooks")) || [];
