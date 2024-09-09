@@ -34,6 +34,8 @@ export const useBookStore = defineStore("bookStore", {
               book.volumeInfo.description || "No description available",
             isFav: false,
             isDescVisible: false,
+            thumbnail:
+              book.volumeInfo.imageLinks?.thumbnail || "No cover available",
           }));
         }
       } catch (err) {

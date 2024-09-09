@@ -6,9 +6,10 @@
     <div class="books-info">
       <ul>
         <li v-for="book in favoriteBooks" :key="book.id">
+          <img :src="book.thumbnail" alt="book cover" />
           <base-card class="card">
             <div>
-              <h3>{{ getShortTitle(book.title) }}</h3>
+              <h2>{{ getShortTitle(book.title) }}</h2>
             </div>
 
             <div class="author">
