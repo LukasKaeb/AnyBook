@@ -18,12 +18,10 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const router = useRouter();
 
-// redirect user to home page when clicking on header
+// redirecting the icons and logo this way because else style will be weird
 const redirect = (route) => {
   router.push(route);
 };
@@ -36,7 +34,12 @@ section {
 }
 nav {
   display: flex;
-  background-color: transparent;
+/* colorful gradient background color */
+  background: linear-gradient(
+    90deg,
+    rgba(132, 39, 126, 1) 0%,
+    rgba(66, 185, 131, 1) 100%
+  );
   padding: 10px;
   border-radius: 5px;
   justify-content: space-between;
@@ -54,8 +57,6 @@ nav {
   transform: rotate(-5deg);
 }
 
-/* align the routes to the middle  */
-
 .routes {
   display: flex;
   justify-content: center;
@@ -71,7 +72,7 @@ nav {
   margin: 0 1rem;
   text-decoration: none;
   color: #333;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .links:hover {
@@ -80,9 +81,7 @@ nav {
 
 .router-link-active {
   color: purple;
-  outline: 1px solid purple;
-  padding: 0.5rem;
-  border-radius: 5px;
+  border-bottom: 1px solid purple;
 }
 .icons i {
   font-size: 3rem;

@@ -6,7 +6,7 @@
 <script setup>
 import TheHeader from "./components/ui/TheHeader.vue";
 
-// import { ref } from "vue";
+
 </script>
 
 <style>

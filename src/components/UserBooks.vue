@@ -14,6 +14,7 @@
 
             <div class="author">
               <p>by {{ book.author }}</p>
+              <p>ISBN: {{ book.isbn }}</p>
             </div>
           </base-card>
           <base-card v-if="book.isDescVisible">

@@ -1,6 +1,5 @@
 <template>
   <section>
-    <!-- <SearchBar @updateSearchTerm="searchBooks" /> -->
     <input
       type="text"
       v-model="searchTerm"
@@ -18,6 +17,7 @@
 
             <div class="author">
               <p>by {{ book.author }}</p>
+              <p>ISBN: {{ book.isbn }}</p>
             </div>
           </base-card>
           <base-card v-if="book.isDescVisible">
@@ -48,11 +48,9 @@
 </template>
 
 <script setup>
-// import SearchBar from "./SearchBar.vue";
 import { ref } from "vue";
 import { useBookStore } from "../stores/index.js";
 
-const books = ref(JSON.parse(localStorage.getItem("favBooks")) || []);
 const searchTerm = ref("");
 
 const getShortTitle = (title) => {
@@ -80,7 +78,7 @@ const toggleDescVisibility = (bookId) => {
   }
 };
 
-const updateSearchTerm = (term) => {
+const updateSearchTerm = () => {
   bookStore.setSearchTerm(searchTerm.value);
   bookStore.fetchBooks();
 };
@@ -93,10 +91,6 @@ const bookStore = useBookStore();
 </script>
 
 <style scoped>
-.books-info {
-  margin-top: 2rem;
-  display: flex;
-}
 
 ul {
   list-style: none;

@@ -36,6 +36,7 @@ export const useBookStore = defineStore("bookStore", {
             isDescVisible: false,
             thumbnail:
               book.volumeInfo.imageLinks?.thumbnail || "No cover available",
+              isbn: book.volumeInfo.industryIdentifiers?.[0].identifier || "No ISBN available",
           }));
         }
       } catch (err) {
